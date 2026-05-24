@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A cryptographically secure password generator — Python project with live browser demo, Shannon entropy analysis, and Fisher-Yates shuffle.">
+<title>Secure Password Generator — Python Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── NAV ───────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">🔐 <span>pwd</span>gen.py</div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#demo">Live Demo</a></li>
+    <li><a href="#code">Source Code</a></li>
+    <li><a href="#theory">Theory</a></li>
+    <li><a href="#usage">Usage</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" onclick="closeMobile()">Features</a>
+  <a href="#demo"     onclick="closeMobile()">Live Demo</a>
+  <a href="#code"     onclick="closeMobile()">Source Code</a>
+  <a href="#theory"   onclick="closeMobile()">Theory</a>
+  <a href="#usage"    onclick="closeMobile()">Usage</a>
+</div>
+
+<!-- ── HERO ──────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-badge"><div class="badge-dot"></div>Python 3 · stdlib only · CSPRNG</div>
+  <h1>Secure Password<br>Generator</h1>
+  <p class="hero-sub">
+    Powered by <strong>secrets</strong> — Python's cryptographically secure module.<br>
+    Shannon entropy analysis. Fisher-Yates shuffle. Zero dependencies.
+  </p>
+  <div class="hero-actions">
+    <a href="#demo" class="btn btn-primary">⚡ Try Live Demo</a>
+    <a href="password_generator.py" download class="btn btn-outline">⬇ Download Script</a>
+  </div>
+</section>
+
+<!-- ── STATS ─────────────────────────────────────────────────── -->
+<div class="stats">
+  <div class="stat"><div class="stat-val">90</div><div class="stat-label">Char Pool Size</div></div>
+  <div class="stat"><div class="stat-val">128+</div><div class="stat-label">Max Entropy Bits</div></div>
+  <div class="stat"><div class="stat-val">0</div><div class="stat-label">Dependencies</div></div>
+  <div class="stat"><div class="stat-val">6</div><div class="stat-label">Strength Levels</div></div>
+  <div class="stat"><div class="stat-val">50</div><div class="stat-label">Passwords / Run</div></div>
+  <div class="stat"><div class="stat-val">256</div><div class="stat-label">Max Length</div></div>
+</div>
+
+<!-- ── FEATURES ──────────────────────────────────────────────── -->
+<section id="features">
+  <div class="container">
+    <div class="section-label">// capabilities</div>
+    <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-desc">Built entirely on Python's standard library. No pip installs. No external APIs. Just clean, secure, auditable code.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,212,255,.1)">🔐</div>
+        <div class="feature-title">Cryptographically Secure</div>
+        <div class="feature-desc">Uses <code>secrets.choice()</code> and <code>secrets.randbelow()</code> — backed by the OS entropy pool (/dev/urandom on Linux). Not <code>random.choice()</code>.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,255,136,.1)">📊</div>
+        <div class="feature-title">Shannon Entropy Analysis</div>
+        <div class="feature-desc">Every password is rated using H = L × log₂(N). Six strength tiers from "Very Weak" to "Excellent" with visual entropy bars.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(124,58,237,.1)">⚙️</div>
+        <div class="feature-title">Fully Configurable</div>
+        <div class="feature-desc">Toggle uppercase, lowercase, digits, and symbols. Exclude ambiguous characters (0, O, l, 1, I). No-duplicates mode via Fisher-Yates shuffle.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,179,71,.1)">🖥️</div>
+        <div class="feature-title">Dual Interface</div>
+        <div class="feature-desc">Interactive menu with input validation for humans, plus a full CLI with argparse flags for scripts, cron jobs, and automation pipelines.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,77,109,.1)">🛡️</div>
+        <div class="feature-title">No-Duplicate Mode</div>
+        <div class="feature-desc">Optional guarantee that no character repeats — implemented via an unbiased Fisher-Yates shuffle, mathematically proven to produce uniform permutations.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,212,255,.1)">📦</div>
+        <div class="feature-title">Zero Dependencies</div>
+        <div class="feature-desc">Only stdlib modules: <code>secrets</code>, <code>string</code>, <code>math</code>, <code>argparse</code>, <code>sys</code>. Works on any Python 3.6+ environment out of the box.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LIVE DEMO ──────────────────────────────────────────────── -->
+<section id="demo">
+  <div class="container">
+    <div class="section-label">// interactive demo</div>
+    <h2 class="section-title">Generate passwords<br>right here.</h2>
+    <p class="section-desc">This demo recreates the exact same logic as the Python script — running in your browser via <code>crypto.getRandomValues()</code>. Click any password to copy it.</p>
+    <div class="demo-wrapper">
+
+      <!-- Controls -->
+      <div class="demo-controls">
+        <div class="control-group">
+          <label class="control-label">Password Length — <span id="lenDisplay">16</span></label>
+          <input type="range" id="lenSlider" min="4" max="64" value="16">
+        </div>
+        <div class="control-group">
+          <label class="control-label">Count — <span id="cntDisplay">3</span></label>
+          <input type="range" id="cntSlider" min="1" max="10" value="3">
+        </div>
+        <div class="control-group">
+          <label class="control-label">Character Types</label>
+          <div class="toggle-grid">
+            <label class="toggle-item"><input type="checkbox" id="useUpper"   checked><div class="toggle-dot"></div><span class="toggle-text">UPPERCASE</span></label>
+            <label class="toggle-item"><input type="checkbox" id="useLower"   checked><div class="toggle-dot"></div><span class="toggle-text">lowercase</span></label>
+            <label class="toggle-item"><input type="checkbox" id="useDigits"  checked><div class="toggle-dot"></div><span class="toggle-text">0–9 Digits</span></label>
+            <label class="toggle-item"><input type="checkbox" id="useSymbols" checked><div class="toggle-dot"></div><span class="toggle-text">!@# Symbols</span></label>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Options</label>
+          <div class="toggle-grid">
+            <label class="toggle-item"><input type="checkbox" id="noAmbig"><div class="toggle-dot"></div><span class="toggle-text">No Ambiguous</span></label>
+            <label class="toggle-item"><input type="checkbox" id="noDup"><div class="toggle-dot"></div><span class="toggle-text">No Duplicates</span></label>
+          </div>
+        </div>
+        <!-- Live entropy preview -->
+        <div class="entropy-preview" id="entropyPreview">
+          <span class="ep-label">Estimated Entropy</span>
+          <span class="ep-val" id="epVal">—</span>
+          <div class="ep-bar-bg"><div class="ep-bar-fill" id="epFill"></div></div>
+          <span class="ep-rating" id="epRating"></span>
+        </div>
+        <button class="gen-btn" id="genBtn">⚡ Generate Passwords</button>
+        <button class="gen-btn btn-secondary" id="clearBtn" style="margin-top:.5rem">✕ Clear Output</button>
+      </div>
+
+      <!-- Terminal output -->
+      <div class="demo-output">
+        <div class="terminal-bar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="terminal-title">password_generator.py — output</span>
+          <button class="copy-all-btn" id="copyAllBtn" title="Copy all passwords">Copy All</button>
+        </div>
+        <div class="terminal-body" id="termOutput">
+          <div class="term-welcome">
+            <span style="color:#58a6ff">╔══════════════════════════════════════════╗</span><br>
+            <span style="color:#58a6ff">║  🔐  SECURE PASSWORD GENERATOR  🔐       ║</span><br>
+            <span style="color:#58a6ff">║  Powered by Python secrets (CSPRNG)      ║</span><br>
+            <span style="color:#58a6ff">╚══════════════════════════════════════════╝</span><br><br>
+            <span style="color:var(--muted)">Configure options and click Generate...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOURCE CODE ────────────────────────────────────────────── -->
+<section id="code">
+  <div class="container">
+    <div class="section-label">// source code</div>
+    <h2 class="section-title">Clean. Annotated.<br>Auditable.</h2>
+    <p class="section-desc">Five key modules — each with a clear, single responsibility. No magic. No obfuscation.</p>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="t1">Character Pool</button>
+      <button class="tab-btn"        data-tab="t2">Generator Core</button>
+      <button class="tab-btn"        data-tab="t3">Entropy Checker</button>
+      <button class="tab-btn"        data-tab="t4">Interactive Menu</button>
+      <button class="tab-btn"        data-tab="t5">CLI Mode</button>
+    </div>
+
+    <div id="t1" class="tab-panel active">
+      <div class="code-block"><pre id="code-t1"></pre></div>
+    </div>
+    <div id="t2" class="tab-panel">
+      <div class="code-block"><pre id="code-t2"></pre></div>
+    </div>
+    <div id="t3" class="tab-panel">
+      <div class="code-block"><pre id="code-t3"></pre></div>
+    </div>
+    <div id="t4" class="tab-panel">
+      <div class="code-block"><pre id="code-t4"></pre></div>
+    </div>
+    <div id="t5" class="tab-panel">
+      <div class="code-block"><pre id="code-t5"></pre></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THEORY ─────────────────────────────────────────────────── -->
+<section id="theory">
+  <div class="container">
+    <div class="section-label">// theoretical background</div>
+    <h2 class="section-title">The science behind<br>secure passwords.</h2>
+    <p class="section-desc">Every design decision is grounded in established cryptographic theory and NIST guidelines.</p>
+    <div class="theory-grid">
+      <div class="theory-card">
+        <div class="theory-num">01</div>
+        <div class="theory-title">Shannon Entropy</div>
+        <div class="theory-body">
+          A password's unpredictability is measured in bits. For length L drawn from N characters:
+          <div class="formula">H = L × log₂(N) bits</div>
+          A 16-char password from a 90-char pool yields ~104.6 bits — Very Strong.
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-num">02</div>
+        <div class="theory-title">CSPRNG vs PRNG</div>
+        <div class="theory-body">
+          Python's <code>random</code> is deterministic — an attacker who finds the seed can replay all output.
+          The <code>secrets</code> module wraps the OS entropy pool (<code>/dev/urandom</code>), satisfying next-bit unpredictability and state compromise resistance.
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-num">03</div>
+        <div class="theory-title">Fisher-Yates Shuffle</div>
+        <div class="theory-body">
+          In no-duplicates mode, the Fisher-Yates algorithm shuffles the pool in O(n) time.
+          Every permutation of N characters is equally probable — provably unbiased when driven by a CSPRNG.
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-num">04</div>
+        <div class="theory-title">NIST SP 800-63B</div>
+        <div class="theory-body">
+          NIST guidelines recommend long, high-entropy passwords over complexity rules.
+          This tool's thresholds (40 / 60 / 80 / 100 / 128 bits) align with SP 800-63B guidance on memorised secrets.
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-num">05</div>
+        <div class="theory-title">Ambiguity Exclusion</div>
+        <div class="theory-body">
+          Characters 0, O, l, 1, I look identical in many typefaces. Excluding them costs ~0.08 bits/char
+          but eliminates manual transcription errors — a real-world usability trade-off.
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-num">06</div>
+        <div class="theory-title">Why No Duplicates?</div>
+        <div class="theory-body">
+          No-duplicate sampling (without replacement) slightly reduces entropy vs. independent sampling.
+          It's a usability feature for policies that require it — not a security improvement.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── USAGE ──────────────────────────────────────────────────── -->
+<section id="usage">
+  <div class="container">
+    <div class="section-label">// usage examples</div>
+    <h2 class="section-title">Run it your way.</h2>
+    <p class="section-desc">Launch the interactive menu or pipe into automation scripts — both modes use identical cryptographic output.</p>
+    <div class="usage-grid">
+      <div class="cmd-block">
+        <div class="cmd-header"><span class="cmd-tag">Basic Usage</span></div>
+        <div class="cmd-body">
+          <div class="cmd-comment"># Interactive menu (no args)</div>
+          <div class="cmd-line">python password_generator.py</div>
+          <div class="cmd-comment"># Show help</div>
+          <div class="cmd-line">python password_generator.py --help</div>
+          <div class="cmd-comment"># 5 passwords of length 20</div>
+          <div class="cmd-line">python password_generator.py -l 20 -n 5</div>
+        </div>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-header"><span class="cmd-tag">Advanced Flags</span></div>
+        <div class="cmd-body">
+          <div class="cmd-comment"># No symbols, length 32</div>
+          <div class="cmd-line">python password_generator.py -l 32 --no-symbols</div>
+          <div class="cmd-comment"># No ambiguous + no duplicates</div>
+          <div class="cmd-line">python password_generator.py --exclude-ambiguous --no-duplicates</div>
+          <div class="cmd-comment"># Quiet numeric PIN</div>
+          <div class="cmd-line">python password_generator.py --only-digits -l 6 --quiet</div>
+        </div>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-header"><span class="cmd-tag">Shell Scripting</span></div>
+        <div class="cmd-body">
+          <div class="cmd-comment"># Capture into variable</div>
+          <div class="cmd-line">PWD=$(python password_generator.py -l 24 --quiet)</div>
+          <div class="cmd-comment"># Generate 10 PINs to file</div>
+          <div class="cmd-line">python password_generator.py --only-digits -l 8 -n 10 --quiet > pins.txt</div>
+        </div>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-header"><span class="cmd-tag">Requirements</span></div>
+        <div class="cmd-body">
+          <div class="cmd-comment"># Python 3.6 or later</div>
+          <div class="cmd-line">python --version</div>
+          <div class="cmd-comment"># No pip installs needed</div>
+          <div class="cmd-line">cat requirements.txt</div>
+          <div style="color:var(--muted);font-family:var(--mono);font-size:.78rem;padding-left:.9rem;margin-top:.2rem;font-style:italic"># (empty — stdlib only)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">🔐 password_generator.py</div>
+  <p class="footer-desc">A cryptographically secure password generator built with Python's standard library. Zero dependencies. Fully auditable.</p>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#demo">Live Demo</a>
+    <a href="#code">Source Code</a>
+    <a href="#theory">Theory</a>
+    <a href="#usage">Usage</a>
+    <a href="password_generator.py" download>Download</a>
+  </div>
+  <div class="footer-copy">Built with Python · secrets · math · argparse · string &nbsp;|&nbsp; MIT License</div>
+</footer>
+
+<!-- Toast -->
+<div class="copy-toast" id="copyToast">✓ Copied!</div>
+
+<!-- Scripts (order matters) -->
+<script src="generator.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
